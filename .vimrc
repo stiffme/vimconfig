@@ -28,11 +28,11 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 filetype on
-color dracula
+"color dracula
+colorscheme desert
 if has("syntax")
 	syntax on
 endif
-
 
 set number
 set laststatus=2
@@ -42,9 +42,14 @@ set tags=tags;
 set backspace=indent,eol,start
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#ycm#enabled = 1
 let g:ycm_global_ycm_extra_conf = '$HOME/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf =0
-
+let g:ctrlp_by_filename =1
+let g:ctrlp_switch_buffer = 'et'
+let g:ctrlp_tabpage_position = 'c'
+let g:ctrlp_working_path_mode = 'r'
+set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
 "NERDTree startup when no args is given
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
