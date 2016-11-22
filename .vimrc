@@ -83,31 +83,24 @@ nmap <C-TAB> <Plug>AirlineSelectNextTab
 nmap <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 "find a proper window to show
-let s:main_window = -1
-fun! SearchMainWindow()
-	let c = 1
-	while c <= bufnr("$") && s:main_window < 0
-		if buflisted(c) != 0 && bufwinnr(c) > 0 
-			let s:main_window = bufwinnr(c)
-		endif
-		let c = c + 1
-	endwhile
-endfun
+fun! DoNotOpenFilesInNerdOrTagList(theFile)
+	if exists("b:NERDTreeType") && b:NERDTreeType == "primary" 
+		let curBuf = bufnr("")
+		let bufend = bufnr("$")
+		let c = 1
+		while c <= bufend
+			if c != curBuf && buflisted(c) != 0 && bufwinnr(c) > 0
+				b#
+				execute c . "wincmd w"
+				execute 'buf ' . curBuf
+				return 
+			endif
+			let c = c + 1
+		endwhile
 
-fun! DoNotOpenFilesInNerdOrTagList()
-	if bufname("#") =~ 'NERD_tree_.*' && buflisted(bufnr("#")) == 0 
-		if(s:main_window < 0)
-			call SearchMainWindow()
-		endif
-		if s:main_window> 0
-			let curBuf = bufnr("")
-			b#
-			execute s:main_window . 'wincmd w'
-			execute 'buf '. curBuf
-		endif
-		return
+		b#
+		execute "vsp | b".curBuf
 	endif
-	"tab sball
 endfun
 
-:au BufWinEnter * nested call DoNotOpenFilesInNerdOrTagList()
+:au BufWinEnter * nested call DoNotOpenFilesInNerdOrTagList(expand("<afile>:p"))
